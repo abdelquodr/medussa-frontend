@@ -2,8 +2,10 @@
 import { apiFetch } from "./api";
 import { Role } from "./types";
 
-const BASE_URL = "http://localhost:3001"; // supposse to be in the environemnt .env
-
+const BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://medusa-backend-8vhp9gzpf-abdelquodrs-projects.vercel.app/"
+    : "http://localhost:3001"; // supposed to be in the environment .env
 export const getRoles = async (): Promise<Role[]> => {
   const url = `${BASE_URL}/api/roles`;
   return apiFetch<Role[]>(url);
