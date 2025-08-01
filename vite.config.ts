@@ -10,7 +10,7 @@ export default defineConfig({
         target:
           "https://medusa-backend-8vhp9gzpf-abdelquodrs-projects.vercel.app",
         changeOrigin: true,
-        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
   },
