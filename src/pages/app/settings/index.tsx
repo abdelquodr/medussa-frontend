@@ -79,9 +79,9 @@ export default function Settings() {
 
   // use fetched roles to replace the hardcoded USER_ROLE_DATA
   const sortedData = useMemo(() => {
-    // if (roles.length === 0) {
-    //   return USER_ROLE_DATA; // fallback to static data while loading
-    // }
+    if (roles.length === 0) {
+      return USER_ROLE_DATA; // fallback to static data while loading
+    }
 
     return roles.map((role) => ({
       _id: role._id.toString(),
