@@ -1,6 +1,11 @@
 import { MessageIcon, PlusIcon } from "@/assets/svgs";
 import { ReusableTab, ReusableTable, RoleCard } from "@/components";
-import { Checkbox, ReusableLabel } from "@/components/fragments";
+import {
+  Checkbox,
+  ReusableBadge,
+  ReusableLabel,
+  TeamsBadge,
+} from "@/components/fragments";
 import { Input } from "@/components/ui/input";
 import DashboardLayout from "../layout";
 import {
@@ -9,57 +14,24 @@ import {
   TABS,
   USER_ROLES_HEADERS,
 } from "./data";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import useSelectItem from "@/utils/hooks/useSelectItem";
 import { Dictionary } from "@/types";
-import { getRoles } from "@/services/roles/rolesApi";
-import { Role } from "@/services/roles/types";
+import { AVATAR_USER_TWO } from "@/assets/images";
 
 interface UserRole {
   _id: string;
   name: string;
   type: "DEFAULT" | "CUSTOM" | "SYSTEM-CUSTOM";
   dateCreated: string;
-  status: string; // Changed from React.ReactNode to string
-  users?: number; // Changed from React.ReactNode to number
+  status: React.ReactNode;
+  users?: React.ReactNode;
 }
-
-const USER_ROLE_DATA: UserRole[] = [
-  {
-    _id: "1",
-    name: "SuperAdmin",
-    type: "DEFAULT",
-    dateCreated: "Jan 1, 2023",
-    status: "Active", // Changed to string
-    users: 7, // Changed to number
-  },
-  {
-    _id: "2",
-    name: "Sales Personnel",
-    type: "DEFAULT",
-    dateCreated: "Feb 1, 2023",
-    status: "Active", // Changed to string
-    users: 6, // Changed to number
-  },
-  {
-    _id: "3",
-    name: "Finance",
-    type: "DEFAULT",
-    dateCreated: "Feb 1, 2023",
-    status: "In Active", // Changed to string
-    users: 6, // Changed to number
-  },
-];
 
 export default function Settings() {
   const [activeRoles, setActiveRoles] = useState<Dictionary[]>(ACTIVE_ROLES);
   const [activeConnectedEmails, setActiveConnectedEmails] =
     useState<Dictionary[]>(CONNECTED_EMAILS);
-
-  // call the local endpoint to get the user roles
-  const [roles, setRoles] = useState<Role[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   const currentRoles = useMemo(() => activeRoles, [activeRoles]);
   const currentConnectedEmails = useMemo(
@@ -77,34 +49,67 @@ export default function Settings() {
     slug: "isActive",
   });
 
-  // use fetched roles to replace the hardcoded USER_ROLE_DATA
-  const sortedData = useMemo(() => {
-    if (roles.length === 0) {
-      return USER_ROLE_DATA; // fallback to static data while loading
-    }
-
-    return roles.map((role) => ({
-      _id: role._id.toString(),
-      name: role.name,
-      type: role.type,
-      dateCreated: role.dateCreated,
-      status: role.status, // Keep as string, not React component
-      users: role.users, // Keep as number, not React component
-    }));
-  }, [roles]);
-
-  // fetch roles
-  useEffect(() => {
-    getRoles()
-      .then(setRoles)
-      .catch((err) => {
-        setError(err.message);
-        console.error(err);
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
-  console.log("Roles:", roles);
+  const USER_ROLE_DATA: UserRole[] = [
+    {
+      _id: "1",
+      name: "Finance",
+      type: "DEFAULT",
+      dateCreated: "Jan 1, 2023",
+      status: <ReusableBadge status={"Active"} />,
+      users: (
+        <TeamsBadge
+          data={[
+            { id: "1", name: "User 1", avatar: AVATAR_USER_TWO },
+            { id: "2", name: "User 2", avatar: AVATAR_USER_TWO },
+            { id: "3", name: "User 3", avatar: AVATAR_USER_TWO },
+            { id: "4", name: "User 4", avatar: AVATAR_USER_TWO },
+            { id: "5", name: "User 5", avatar: AVATAR_USER_TWO },
+            { id: "6", name: "User 6", avatar: AVATAR_USER_TWO },
+            { id: "7", name: "User 7", avatar: AVATAR_USER_TWO },
+          ]}
+        />
+      ),
+    },
+    {
+      _id: "2",
+      name: "Admin",
+      type: "DEFAULT",
+      dateCreated: "Feb 1, 2023",
+      status: <ReusableBadge status={"Active"} />,
+      users: (
+        <TeamsBadge
+          data={[
+            { id: "1", name: "User 1", avatar: AVATAR_USER_TWO },
+            { id: "2", name: "User 2", avatar: AVATAR_USER_TWO },
+            { id: "3", name: "User 3", avatar: AVATAR_USER_TWO },
+            { id: "4", name: "User 4", avatar: AVATAR_USER_TWO },
+            { id: "5", name: "User 5", avatar: AVATAR_USER_TWO },
+            { id: "6", name: "User 6", avatar: AVATAR_USER_TWO },
+          ]}
+        />
+      ),
+    },
+    {
+      _id: "3",
+      name: "Finance",
+      type: "DEFAULT",
+      dateCreated: "Feb 1, 2023",
+      status: <ReusableBadge status={"In Active"} />,
+      users: (
+        <TeamsBadge
+          data={[
+            { id: "1", name: "User 1", avatar: AVATAR_USER_TWO },
+            { id: "2", name: "User 2", avatar: AVATAR_USER_TWO },
+            { id: "3", name: "User 3", avatar: AVATAR_USER_TWO },
+            { id: "4", name: "User 4", avatar: AVATAR_USER_TWO },
+            { id: "5", name: "User 5", avatar: AVATAR_USER_TWO },
+            { id: "6", name: "User 6", avatar: AVATAR_USER_TWO },
+          ]}
+        />
+      ),
+    },
+    // Add more sample data as needed
+  ];
 
   return (
     <DashboardLayout
@@ -122,6 +127,7 @@ export default function Settings() {
               Update your roles details and information.
             </span>
           </div>
+
           <section className="mt-6">
             <div className="md:flex gap-8 lg:w-1/2">
               <ReusableLabel
@@ -166,6 +172,7 @@ export default function Settings() {
               </div>
             </div>
           </section>
+
           <div className="flex flex-col lg:flex-row gap-8 border-t pt-8 mt-8 lg:pr-5">
             <ReusableLabel
               title="Active Role"
@@ -201,65 +208,13 @@ export default function Settings() {
           </div>
 
           <div className="mt-8">
-            {loading || sortedData.length === 0 ? (
-              <div className="w-full">
-                {/* Table Header Skeleton */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-24 h-5 bg-gray-300 rounded animate-pulse"></div>
-                  <div className="w-32 h-8 bg-gray-300 rounded animate-pulse"></div>
-                </div>
-
-                {/* Table Skeleton */}
-                <div className="rounded-md border shadow-shadowTwo">
-                  {/* Table Header Skeleton */}
-                  <div className="border-b bg-gray-50 p-4">
-                    <div className="flex gap-4">
-                      <div className="w-8 h-4 bg-gray-300 rounded animate-pulse"></div>
-                      <div className="w-20 h-4 bg-gray-300 rounded animate-pulse"></div>
-                      <div className="w-16 h-4 bg-gray-300 rounded animate-pulse"></div>
-                      <div className="w-24 h-4 bg-gray-300 rounded animate-pulse"></div>
-                      <div className="w-16 h-4 bg-gray-300 rounded animate-pulse"></div>
-                      <div className="w-12 h-4 bg-gray-300 rounded animate-pulse"></div>
-                      <div className="w-8 h-4 bg-gray-300 rounded animate-pulse"></div>
-                    </div>
-                  </div>
-
-                  {/* Table Rows Skeleton */}
-                  {Array.from({ length: 5 }).map((_, idx) => (
-                    <div key={idx} className="border-b p-4 bg-white">
-                      <div className="flex gap-4 items-center">
-                        <div className="w-4 h-4 bg-gray-300 rounded animate-pulse"></div>
-                        <div className="w-24 h-4 bg-gray-300 rounded animate-pulse"></div>
-                        <div className="w-16 h-4 bg-gray-300 rounded animate-pulse"></div>
-                        <div className="w-20 h-4 bg-gray-300 rounded animate-pulse"></div>
-                        <div className="w-16 h-6 bg-gray-300 rounded-full animate-pulse"></div>
-                        <div className="flex gap-1">
-                          {Array.from({ length: 3 }).map((_, avatarIdx) => (
-                            <div
-                              key={avatarIdx}
-                              className="w-6 h-6 bg-gray-300 rounded-full animate-pulse"
-                            ></div>
-                          ))}
-                        </div>
-                        <div className="w-8 h-8 bg-gray-300 rounded animate-pulse"></div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : error ? (
-              <div className="flex justify-center items-center h-32">
-                <p className="text-red-500">Error loading roles: {error}</p>
-              </div>
-            ) : (
-              <ReusableTable
-                title="User Roles"
-                hasDownloadBtn
-                hasCheck
-                headerList={USER_ROLES_HEADERS}
-                dataList={sortedData}
-              />
-            )}
+            <ReusableTable
+              title="User Roles"
+              hasDownloadBtn
+              hasCheck
+              headerList={USER_ROLES_HEADERS}
+              dataList={USER_ROLE_DATA}
+            />
           </div>
         </section>
       </section>

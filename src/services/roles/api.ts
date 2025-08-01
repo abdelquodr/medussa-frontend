@@ -10,6 +10,7 @@ export async function apiFetch<T>(
       headers: {
         "Content-Type": "application/json",
       },
+      mode: "cors",
       ...options,
     });
 
