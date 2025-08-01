@@ -4,10 +4,7 @@ import { Dictionary } from "@/types";
 import { ArrowDown } from "lucide-react";
 import * as React from "react";
 import { Checkbox } from "../fragments";
-import { ReusableBadge } from "../fragments";
-import { TeamsBadge } from "../fragments";
 import { Button } from "../ui/button";
-import { AVATAR_USER_TWO } from "@/assets/images";
 import {
   Table,
   TableBody,
@@ -29,7 +26,7 @@ interface ReusableTableProps {
   hasDownloadBtn?: boolean;
   handleExport?: () => void;
   hasCheck?: boolean;
-  dataList: Dictionary[]; // Changed to be more generic
+  dataList: Dictionary[];
 }
 
 export default function ReusableTable({
@@ -156,31 +153,15 @@ export default function ReusableTable({
                       />
                     </TableCell>
                   )}
-                  {headerList.map((header, index) => {
-                    const value = (data as Dictionary)[header.accessor];
-                    return (
-                      <TableCell
-                        key={index}
-                        className={`text-xs text-gray-600 ${
-                          index === 0 && "font-semibold"
-                        }`}
-                      >
-                        {header.accessor === "status" ? (
-                          <ReusableBadge status={value as string} />
-                        ) : header.accessor === "users" ? (
-                          <TeamsBadge
-                            data={Array(value as number).fill({
-                              id: "1",
-                              name: "User 1",
-                              avatar: AVATAR_USER_TWO,
-                            })}
-                          />
-                        ) : (
-                          value
-                        )}
+                  {Object.entries(data)
+                    .filter(([key]) => {
+                      return key !== "_id";
+                    })
+                    .map((item: Dictionary, index) => (
+                      <TableCell key={index} className="text-xs text-gray-600">
+                        {item[1]}
                       </TableCell>
-                    );
-                  })}
+                    ))}
                   <TableCell>
                     <Button variant="ghost" size="icon">
                       <DownloadIcon />
