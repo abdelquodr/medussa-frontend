@@ -158,7 +158,12 @@ export default function ReusableTable({
                       return key !== "_id";
                     })
                     .map((item: Dictionary, index) => (
-                      <TableCell key={index} className="text-xs text-gray-600">
+                      <TableCell
+                        key={index}
+                        className={`text-xs text-gray-600 ${
+                          index === 0 ? "font-semibold" : ""
+                        }`}
+                      >
                         {item[1]}
                       </TableCell>
                     ))}

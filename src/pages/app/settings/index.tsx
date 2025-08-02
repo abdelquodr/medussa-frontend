@@ -52,7 +52,7 @@ export default function Settings() {
   const USER_ROLE_DATA: UserRole[] = [
     {
       _id: "1",
-      name: "Finance",
+      name: "Superadmin",
       type: "DEFAULT",
       dateCreated: "Jan 1, 2023",
       status: <ReusableBadge status={"Active"} />,
@@ -66,13 +66,14 @@ export default function Settings() {
             { id: "5", name: "User 5", avatar: AVATAR_USER_TWO },
             { id: "6", name: "User 6", avatar: AVATAR_USER_TWO },
             { id: "7", name: "User 7", avatar: AVATAR_USER_TWO },
+            { id: "8", name: "User 8", avatar: AVATAR_USER_TWO },
           ]}
         />
       ),
     },
     {
       _id: "2",
-      name: "Admin",
+      name: "Merchantadmin",
       type: "DEFAULT",
       dateCreated: "Feb 1, 2023",
       status: <ReusableBadge status={"Active"} />,
@@ -91,7 +92,7 @@ export default function Settings() {
     },
     {
       _id: "3",
-      name: "Finance",
+      name: "supportadmin",
       type: "DEFAULT",
       dateCreated: "Feb 1, 2023",
       status: <ReusableBadge status={"In Active"} />,
@@ -103,12 +104,41 @@ export default function Settings() {
             { id: "3", name: "User 3", avatar: AVATAR_USER_TWO },
             { id: "4", name: "User 4", avatar: AVATAR_USER_TWO },
             { id: "5", name: "User 5", avatar: AVATAR_USER_TWO },
-            { id: "6", name: "User 6", avatar: AVATAR_USER_TWO },
           ]}
         />
       ),
     },
-    // Add more sample data as needed
+    {
+      _id: "4",
+      name: "sales personnel",
+      type: "CUSTOM",
+      dateCreated: "Mar 1, 2023",
+      status: <ReusableBadge status={"Active"} />,
+      users: (
+        <TeamsBadge
+          data={[
+            { id: "1", name: "User 1", avatar: AVATAR_USER_TWO },
+            { id: "2", name: "User 2", avatar: AVATAR_USER_TWO },
+            { id: "3", name: "User 3", avatar: AVATAR_USER_TWO },
+          ]}
+        />
+      ),
+    },
+    {
+      _id: "5",
+      name: "Deputy sales personnel",
+      type: "CUSTOM",
+      dateCreated: "Mar 1, 2023",
+      status: <ReusableBadge status={"In Active"} />,
+      users: (
+        <TeamsBadge
+          data={[
+            { id: "1", name: "User 1", avatar: AVATAR_USER_TWO },
+            { id: "2", name: "User 2", avatar: AVATAR_USER_TWO },
+          ]}
+        />
+      ),
+    },
   ];
 
   return (
