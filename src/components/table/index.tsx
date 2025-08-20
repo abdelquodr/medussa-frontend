@@ -40,6 +40,9 @@ export default function ReusableTable({
   const [selectedRoles, setSelectedRoles] = React.useState<Set<string>>(
     new Set()
   );
+  // State for search functionality
+  const [searchUser, setSearchUser] = React.useState("");
+
   const [sortConfig, setSortConfig] = React.useState<{
     key: string;
     direction: "asc" | "desc";
@@ -53,15 +56,26 @@ export default function ReusableTable({
     }));
   };
 
+  // Filter data based on search input
+  const filteredData = React.useMemo(() => {
+    if (!searchUser) return dataList;
+    return dataList.filter((item) =>
+      Object.values(item).some((value) =>
+        String(value).toLowerCase().includes(searchUser.toLowerCase())
+      )
+    );
+  }, [dataList, searchUser]);
+
+  // Sort the filtered data
   const sortedData = React.useMemo(() => {
-    return [...dataList].sort((a, b) => {
+    if (!sortConfig.key) return filteredData;
+    return [...filteredData].sort((a, b) => {
       if (sortConfig.direction === "asc") {
         return a[sortConfig.key] > b[sortConfig.key] ? 1 : -1;
       }
       return a[sortConfig.key] < b[sortConfig.key] ? 1 : -1;
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sortConfig]);
+  }, [filteredData, sortConfig]);
 
   const toggleRole = (roleId: string) => {
     setSelectedRoles((current) => {
@@ -84,6 +98,13 @@ export default function ReusableTable({
         : new Set(dataList.map((role: Dictionary) => role._id))
     );
   };
+
+  // Handle search input change
+  const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchUser(e.target.value);
+  };
+
+  console.log(searchUser, "<=== searchUser");
 
   return (
     <div className="w-full">
@@ -110,6 +131,11 @@ export default function ReusableTable({
         )}
       </div>
       <div className="rounded-md border shadow-shadowTwo">
+        <input
+          placeholder="search User"
+          value={searchUser}
+          onChange={handleOnchange}
+        />
         <Table>
           <TableHeader>
             <TableRow>
